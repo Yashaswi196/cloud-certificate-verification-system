@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Change this to the real website address after deployment
-FRONTEND_URL = "http://127.0.0.1:5000"
+FRONTEND_URL = "http://127.0.0.1:5500"
 
 # Temporary storage (Firebase will replace this later)
 certificates = {}
@@ -40,7 +40,9 @@ def add_certificate():
     certificate = {
         "certificate_id": cert_id,
         "student_name": data["student_name"].strip(),
+        "student_email": str(data.get("student_email", "")).strip(),
         "course": data["course"].strip(),
+        "certificate_type": str(data.get("certificate_type", "")).strip(),
         "issue_date": data["issue_date"].strip(),
         "issued_by": data["issued_by"].strip(),
         "status": "valid",
@@ -50,7 +52,7 @@ def add_certificate():
     return jsonify({
         "message": "Certificate issued successfully",
         "certificate": certificate,
-        "verification_url": f"{FRONTEND_URL}/verify/{cert_id}",
+        "verification_url": f"{FRONTEND_URL}/index.html?id={cert_id}",
     }), 201
 
 
@@ -76,7 +78,18 @@ def revoke_certificate(certificate_id):
     return jsonify({"message": "Certificate revoked", "certificate": cert})
 
 
-# 4. Admin dashboard: list all certificates
+# 4. Admin restores a revoked certificate
+@app.route("/api/certificates/<certificate_id>/restore", methods=["PUT"])
+def restore_certificate(certificate_id):
+    cert = certificates.get(certificate_id)
+    if not cert:
+        return jsonify({"error": "Certificate not found"}), 404
+
+    cert["status"] = "valid"
+    return jsonify({"message": "Certificate restored", "certificate": cert})
+
+
+# 5. Admin dashboard: list all certificates
 @app.route("/api/certificates", methods=["GET"])
 def list_certificates():
     return jsonify({"certificates": list(certificates.values())})
