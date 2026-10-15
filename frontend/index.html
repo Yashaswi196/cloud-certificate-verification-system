@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CertiVerify | Certificate Verification</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#home">
+      <span class="brand-icon">✓</span> CertiVerify
+    </a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#admin">Issue Certificate</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#verify">Verify</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="hero section" id="home">
+      <div class="hero-content">
+        <span class="eyebrow">CLOUD-BASED CERTIFICATE SYSTEM</span>
+        <h1>Verify certificates.<br><span>Build trust.</span></h1>
+        <p>
+          Issue, manage and verify digital certificates through a
+          simple platform designed to make certificate verification
+          faster and more reliable.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#verify">Verify a Certificate</a>
+          <a class="button secondary" href="#admin">Admin Portal</a>
+        </div>
+        <div class="hero-note">Simple · Secure design · Easy verification</div>
+      </div>
+
+      <div class="certificate-preview">
+        <div class="preview-top">CERTIFICATE OF ACHIEVEMENT</div>
+        <div class="preview-seal">CV</div>
+        <h2>Certificate of Completion</h2>
+        <p>This certificate is proudly presented to</p>
+        <div class="preview-name">Name</div>
+        <p>for successfully completing</p>
+        <strong>Certificate Type</strong>
+        <div class="preview-bottom">
+          <span>CertiVerify</span>
+          <span>CC-DEMO-001</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section features">
+      <div class="section-heading">
+        <span class="eyebrow">OUR PLATFORM</span>
+        <h2>Everything in one place</h2>
+        <p>Manage the certificate lifecycle through one interface.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon">01</div>
+          <h3>Issue Certificates</h3>
+          <p>Enter student and course details through the admin form.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">02</div>
+          <h3>Manage Records</h3>
+          <p>Search certificate records and view their current status.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">03</div>
+          <h3>Verify Instantly</h3>
+          <p>Use a certificate ID to check whether a record is valid.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ADMIN FORM -->
+    <section class="section panel-section" id="admin">
+      <div class="section-heading">
+        <span class="eyebrow">ADMIN PORTAL</span>
+        <h2>Issue a certificate</h2>
+        <p>Enter the details below to create a demo certificate record.</p>
+      </div>
+
+      <form id="certificateForm" class="form-card">
+        <div class="form-grid">
+          <div class="field">
+            <label for="studentName">Student full name *</label>
+            <input id="studentName" name="studentName"
+                   placeholder="e.g. Rahul Sharma" required maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="studentEmail">Student email</label>
+            <input id="studentEmail" name="studentEmail" type="email"
+                   placeholder="student@example.com" maxlength="150">
+          </div>
+
+          <div class="field">
+            <label for="courseName">Course / Program *</label>
+            <input id="courseName" name="courseName"
+                   placeholder="e.g. Cloud Computing" required maxlength="120">
+          </div>
+
+          <div class="field">
+            <label for="certificateType">Certificate type *</label>
+            <select id="certificateType" name="certificateType" required>
+              <option value="">Select type</option>
+              <option>Course Completion</option>
+              <option>Internship</option>
+              <option>Achievement</option>
+              <option>Participation</option>
+              <option>Training</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="issueDate">Issue date *</label>
+            <input id="issueDate" name="issueDate" type="date" required>
+          </div>
+
+          <div class="field">
+            <label for="issuerName">Issuing organization *</label>
+            <input id="issuerName" name="issuerName"
+                   placeholder="e.g. ABC Institute" required maxlength="120">
+          </div>
+        </div>
+
+        <button class="button primary" type="submit">Issue Certificate</button>
+        <p id="formMessage" class="message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="section dashboard-section" id="dashboard">
+      <div class="dashboard-heading">
+        <div>
+          <span class="eyebrow">ADMIN OVERVIEW</span>
+          <h2>Certificate dashboard</h2>
+          <p>View and manage the certificate records in this browser.</p>
+        </div>
+        <button id="resetDemo" class="button secondary" type="button">
+          Reset demo data
+        </button>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <span>Total certificates</span>
+          <strong id="totalCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Valid</span>
+          <strong id="validCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Revoked</span>
+          <strong id="revokedCount">0</strong>
+        </article>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <input id="dashboardSearch" type="search"
+                 placeholder="Search by name, course or ID..."
+                 aria-label="Search certificates">
+          <select id="statusFilter" aria-label="Filter by status">
+            <option value="all">All statuses</option>
+            <option value="valid">Valid</option>
+            <option value="revoked">Revoked</option>
+          </select>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Certificate ID</th>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Issue date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="certificateTableBody"></tbody>
+          </table>
+        </div>
+        <p id="emptyDashboard" class="empty-state" hidden>
+          No certificates match your search.
+        </p>
+      </div>
+      <p class="demo-note">
+        Demo mode: records are stored in this browser only. This dashboard
+        is not an authenticated admin system yet.
+      </p>
+    </section>
+
+    <!-- PUBLIC VERIFICATION -->
+    <section class="section verify-section" id="verify">
+      <div class="section-heading">
+        <span class="eyebrow">PUBLIC VERIFICATION</span>
+        <h2>Verify a certificate</h2>
+        <p>Enter the certificate ID to check its current demo status.</p>
+      </div>
+
+      <form id="verifyForm" class="verify-form">
+        <label class="sr-only" for="verifyId">Certificate ID</label>
+        <input id="verifyId" placeholder="Enter certificate ID"
+               required maxlength="80" autocomplete="off">
+        <button class="button primary" type="submit">Verify</button>
+      </form>
+
+      <div id="verificationResult" class="result-card" aria-live="polite" hidden></div>
+      <p class="demo-note">
+        A result is only as reliable as the record being checked. Real
+        verification will query the Flask API and cloud database after integration.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#home">✓ CertiVerify</a>
+    <p>Cloud-Based Digital Certificate Verification System</p>
+    
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
