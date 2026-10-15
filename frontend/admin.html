@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CertiVerify | Admin Panel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h2>CertiVerify — Admin Panel</h2>
+    <nav>
+      <a href="index.html">Public Verification</a>
+      <button id="logoutButton" class="secondary" hidden>Logout</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="authPanel" class="panel">
+      <h1 id="authHeading">Admin Login</h1>
+      <p>Sign in to manage digital certificates.</p>
+      <p id="authMessage" class="message" role="status"></p>
+
+      <form id="loginForm">
+        <label for="loginUsername">Username</label>
+        <input id="loginUsername" required minlength="3" autocomplete="username">
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" required
+               autocomplete="current-password">
+
+        <button type="submit">Login</button>
+      </form>
+
+      <form id="registerForm" hidden>
+        <label for="registerUsername">Username (at least 3 characters)</label>
+        <input id="registerUsername" required minlength="3"
+               autocomplete="username">
+
+        <label for="registerPassword">Password (at least 6 characters)</label>
+        <input id="registerPassword" type="password" required minlength="6"
+               autocomplete="new-password">
+
+        <label for="confirmPassword">Confirm password</label>
+        <input id="confirmPassword" type="password" required minlength="6"
+               autocomplete="new-password">
+
+        <label for="signupCode">Admin signup code</label>
+        <input id="signupCode" type="password" required
+               autocomplete="off">
+
+        <p class="hint">
+          Admin registration is restricted to authorized users.
+          Obtain the signup code from your project administrator.
+        </p>
+        <button type="submit">Register Admin</button>
+      </form>
+
+      <p id="authSwitch">
+        Don't have an admin account?
+        <button id="showRegister" type="button" class="text-button">
+          Register
+        </button>
+      </p>
+      <button id="showLogin" type="button" class="text-button" hidden>
+        Back to Login
+      </button>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="panel">
+        <h1>Issue a Certificate</h1>
+        <p>Enter the details below to issue a new certificate.</p>
+        <p id="issueMessage" class="message" role="status"></p>
+
+        <form id="issueForm" class="form-grid">
+          <div>
+            <label for="studentName">Student name *</label>
+            <input id="studentName" required>
+          </div>
+          <div>
+            <label for="studentEmail">Student email</label>
+            <input id="studentEmail" type="email">
+          </div>
+          <div>
+            <label for="course">Course / achievement *</label>
+            <input id="course" required>
+          </div>
+
+<div>
+    <label for="certificateType">Certificate type *</label>
+    <select id="certificateType" name="certificateType" required>
+        <option value="" disabled selected>Select certificate type</option>
+        <option value="Course Completion">Course Completion</option>
+        <option value="Internship">Internship</option>
+        <option value="Achievement">Achievement</option>
+        <option value="Participation">Participation</option>
+        <option value="Workshop">Workshop</option>
+        <option value="Technical Certification">Technical Certification</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
+
+
+          <div>
+            <label for="issueDate">Issue date *</label>
+            <input id="issueDate" type="date" required>
+          </div>
+          <div>
+            <label for="issuedBy">Issued by *</label>
+            <input id="issuedBy" required>
+          </div>
+          <div class="full-width">
+            <button type="submit">Issue Certificate</button>
+          </div>
+        </form>
+
+<div id="issuedResult" hidden>
+    <h2>Certificate Preview</h2>
+
+    <article id="adminCertificate" class="certificate">
+        <p class="certificate-label">CERTIFICATE OF ACHIEVEMENT</p>
+
+        <h1 id="adminCertTitle">Certificate of Completion</h1>
+
+        <p>This certificate is proudly presented to</p>
+
+        <h2 id="adminCertStudent" class="student-name"></h2>
+
+        <p>for successfully completing</p>
+
+        <h3 id="adminCertCourse"></h3>
+
+        <div class="certificate-details">
+            <p><strong>Certificate ID:</strong> <span id="adminCertId"></span></p>
+            <p><strong>Issue date:</strong> <span id="adminCertDate"></span></p>
+            <p><strong>Issued by:</strong> <span id="adminCertIssuer"></span></p>
+        </div>
+
+        <div class="certificate-footer">
+            <div>
+                <p class="signature-line"></p>
+                <strong id="adminCertIssuerFooter"></strong>
+                <p>Authorized Issuer</p>
+            </div>
+
+            <div id="adminCertificateQR"
+                 aria-label="Certificate verification QR code"></div>
+        </div>
+
+        <p class="certificate-note">
+            Verify this certificate using its unique ID or QR code.
+        </p>
+    </article>
+
+    <div class="button-row">
+        <button id="adminPrintButton" type="button">
+            Print / Save as PDF
+        </button>
+        <a id="adminPublicLink" href="index.html" target="_blank"
+           rel="noopener noreferrer">
+            Open Public Verification
+        </a>
+    </div>
+</div>
+
+      </div>
+
+      <div class="panel">
+        <div class="section-heading">
+          <h2>Issued Certificates</h2>
+          <button id="refreshButton" type="button" class="secondary">
+            Refresh
+          </button>
+        </div>
+        <p id="listMessage" class="message" role="status"></p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Certificate ID</th>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Issue Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="certificateRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="admin.js"></script>
+
+</body>
+</html>

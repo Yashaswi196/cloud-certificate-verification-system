@@ -1,538 +1,95 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CertiVerify | Digital Certificate Verification</title>
+  <title>CertiVerify | Public Verification</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- ADMIN AUTHENTICATION -->
-  <section id="authSection" class="auth-section">
-    <div class="auth-card">
-      <h2 id="authTitle">Admin Login</h2>
-      <p id="authSubtitle">
-        Sign in to manage digital certificates.
-      </p>
-
-      <!-- LOGIN FORM -->
-      <form id="loginForm">
-        <label for="loginUsername">Username</label>
-        <input
-          type="text"
-          id="loginUsername"
-          placeholder="Enter your username"
-          required
-          minlength="3"
-          autocomplete="username"
-        >
-
-        <label for="loginPassword">Password</label>
-        <input
-          type="password"
-          id="loginPassword"
-          placeholder="Enter your password"
-          required
-          autocomplete="current-password"
-        >
-
-        <button type="submit" id="loginButton">
-          Login
-        </button>
-
-        <p class="auth-switch">
-          Don't have an admin account?
-          <button type="button" id="showRegister">
-            Register
-          </button>
-        </p>
-      </form>
-
-      <!-- REGISTRATION FORM -->
-      <form id="registerForm" hidden>
-        <label for="registerUsername">Username</label>
-        <input
-          type="text"
-          id="registerUsername"
-          placeholder="Choose a username"
-          required
-          minlength="3"
-          autocomplete="username"
-        >
-
-        <label for="registerPassword">Password</label>
-        <input
-          type="password"
-          id="registerPassword"
-          placeholder="Create a password"
-          required
-          minlength="6"
-          autocomplete="new-password"
-        >
-
-        <label for="confirmPassword">Confirm Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Re-enter your password"
-          required
-          minlength="6"
-          autocomplete="new-password"
-        >
-
-        <label for="signupCode">Admin Signup Code</label>
-        <input
-          type="password"
-          id="signupCode"
-          placeholder="Enter the admin signup code"
-          required
-          autocomplete="off"
-        >
-
-        <button type="submit" id="registerButton">
-          Create Admin Account
-        </button>
-
-        <p class="auth-switch">
-          Already registered?
-          <button type="button" id="showLogin">
-            Login
-          </button>
-        </p>
-      </form>
-
-      <p
-        id="authMessage"
-        class="auth-message"
-        role="status"
-        aria-live="polite"
-      ></p>
-    </div>
-  </section>
-
-  <!-- NAVIGATION HEADER -->
-  <header class="navbar">
-    <a href="#home" class="brand">
-      <span class="brand-icon">CV</span>
-      <span>CertiVerify</span>
-    </a>
-
+  <header class="topbar no-print">
+    <h2>CertiVerify</h2>
     <nav>
-      <a href="#home">Home</a>
-      <a href="#admin">Issue Certificate</a>
-      <a href="#dashboard">Dashboard</a>
-      <a href="#verify">Verify</a>
+      <a href="index.html">Verify Certificate</a>
+      <a href="admin.html">Admin Login</a>
     </nav>
-
-    <!-- LOGOUT BUTTON -->
-    <button
-      type="button"
-      id="logoutButton"
-      class="button secondary-button"
-    >
-      Logout
-    </button>
   </header>
 
-  <main>
+  <main class="container">
+    <section class="panel no-print">
+      <h1>Digital Certificate Verification</h1>
+      <p>Enter the certificate ID to verify its authenticity.</p>
 
-    <!-- HOME -->
-    <section id="home" class="hero section">
-      <div class="hero-content">
-        <span class="eyebrow">CLOUD-BASED CERTIFICATE SYSTEM</span>
-
-        <h1>
-          Digital Certificates.<br>
-          <span>Trusted Verification.</span>
-        </h1>
-
-        <p>
-          Issue digital certificates and verify their authenticity using a
-          unique certificate ID or QR code.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#admin" class="button primary-button">
-            Issue a Certificate
-          </a>
-
-          <a href="#verify" class="button secondary-button">
-            Verify a Certificate
-          </a>
-        </div>
-
-        <p class="demo-notice">
-          Demo mode: records are currently stored in this browser.
-        </p>
-      </div>
-
-      <div class="hero-preview">
-        <div class="preview-seal">✓</div>
-        <span class="eyebrow">DIGITAL CERTIFICATE</span>
-        <h2>Certificate of Achievement</h2>
-        <p>This certificate is presented to</p>
-        <h3>Student Name</h3>
-        <p>For successfully completing the course</p>
-        <div class="preview-line"></div>
-
-        <div class="preview-footer">
-          <span>
-            Certificate ID<br>
-            <strong>CV-2026-XXXX</strong>
-          </span>
-          <span class="preview-stamp">VERIFIABLE</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="features section">
-      <div class="section-heading">
-        <span class="eyebrow">KEY FEATURES</span>
-        <h2>Simple and secure certificate management</h2>
-        <p>Manage certificate issuance and verification from one place.</p>
-      </div>
-
-      <div class="feature-grid">
-        <article class="feature-card">
-          <div class="feature-icon">01</div>
-          <h3>Digital Issuance</h3>
-          <p>
-            Create certificates with student details and a unique certificate ID.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">02</div>
-          <h3>QR Verification</h3>
-          <p>
-            Use a QR code or certificate ID to check the certificate record.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">03</div>
-          <h3>Status Management</h3>
-          <p>
-            View issued certificates and manage valid or revoked records.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- ISSUE CERTIFICATE -->
-    <section id="admin" class="section content-section">
-      <div class="section-heading">
-        <span class="eyebrow">ADMIN PANEL</span>
-        <h2>Issue a new certificate</h2>
-        <p>
-          Enter the certificate details below to generate a digital certificate.
-        </p>
-      </div>
-
-      <div class="form-card">
-        <form id="certificateForm">
-          <div class="form-grid">
-
-            <div class="field">
-              <label for="studentName">Student name *</label>
-              <input
-                id="studentName"
-                name="studentName"
-                type="text"
-                placeholder="Enter full name"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label for="studentEmail">Student email</label>
-              <input
-                id="studentEmail"
-                name="studentEmail"
-                type="email"
-                placeholder="student@example.com"
-              >
-            </div>
-
-            <div class="field">
-              <label for="courseName">Course / Achievement *</label>
-              <input
-                id="courseName"
-                name="courseName"
-                type="text"
-                placeholder="e.g. Cloud Computing"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label for="certificateType">Certificate type *</label>
-              <select id="certificateType" name="certificateType" required>
-                <option value="">Select certificate type</option>
-                <option value="Course Completion">Course Completion</option>
-                <option value="Achievement">Achievement</option>
-                <option value="Participation">Participation</option>
-                <option value="Internship">Internship</option>
-                <option value="Training">Training</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="issueDate">Issue date *</label>
-              <input
-                id="issueDate"
-                name="issueDate"
-                type="date"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label for="issuerName">Issued by *</label>
-              <input
-                id="issuerName"
-                name="issuerName"
-                type="text"
-                placeholder="Institution or organization"
-                required
-              >
-            </div>
-
-          </div>
-
-          <p
-            id="formMessage"
-            class="message"
-            role="status"
-            aria-live="polite"
-          ></p>
-
-          <button type="submit" class="button primary-button">
-            Generate Certificate
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- ISSUED CERTIFICATE -->
-    <section
-      id="issuedCertificateSection"
-      class="section content-section"
-      hidden
-    >
-      <div class="section-heading">
-        <span class="eyebrow">CERTIFICATE GENERATED</span>
-        <h2>Your issued certificate</h2>
-        <p>
-          The certificate is issued. You can print it or save it as a PDF.
-        </p>
-      </div>
-
-      <div id="issuedCertificate" class="issued-certificate">
-        <div class="certificate-top">
-          <div class="certificate-emblem">CV</div>
-          <p class="certificate-label">DIGITAL CERTIFICATE</p>
-          <h2>Certificate of Achievement</h2>
-          <p>This certificate is proudly presented to</p>
-          <h3 id="issuedStudentName"></h3>
-          <p>for successfully completing</p>
-          <h3 id="issuedCourseName" class="course-title"></h3>
-        </div>
-
-        <div class="certificate-bottom">
-          <div class="certificate-details">
-            <p>
-              <strong>Certificate ID:</strong>
-              <span id="issuedCertificateId"></span>
-            </p>
-            <p>
-              <strong>Certificate Type:</strong>
-              <span id="issuedCertificateType"></span>
-            </p>
-            <p>
-              <strong>Issue Date:</strong>
-              <span id="issuedIssueDate"></span>
-            </p>
-            <p>
-              <strong>Issued By:</strong>
-              <span id="issuedIssuerName"></span>
-            </p>
-            <p>
-              <strong>Status:</strong>
-              <span class="issued-status">VALID</span>
-            </p>
-          </div>
-
-          <div class="qr-area">
-            <div id="certificateQrCode"></div>
-            <p>Scan to check certificate</p>
-            <small id="qrHelp"></small>
-          </div>
-        </div>
-      </div>
-
-      <div class="certificate-actions">
-        <button
-          type="button"
-          id="printCertificate"
-          class="button primary-button"
+      <form id="verifyForm" class="verify-form">
+        <label for="certificateId">Certificate ID</label>
+        <input
+          id="certificateId"
+          placeholder="Example: CERT-2026-ABC123"
+          required
         >
-          Print / Save as PDF
-        </button>
+        <button type="submit">Verify Certificate</button>
+      </form>
 
-        <button
-          type="button"
-          id="hideIssuedCertificate"
-          class="button secondary-button"
-        >
-          Close Certificate
-        </button>
-      </div>
+      <p id="verifyMessage" class="message" role="status"></p>
     </section>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="section content-section">
-      <div class="section-heading">
-        <span class="eyebrow">ADMIN DASHBOARD</span>
-        <h2>Certificate records</h2>
-        <p>Search issued certificates and manage their status.</p>
-      </div>
+    <section id="verificationResult" class="panel" hidden>
+      <h2>Verification Result</h2>
+      <p id="statusBadge" class="status-badge"></p>
+      <p id="statusMessage"></p>
+    </section>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <span>Total certificates</span>
-          <strong id="totalCount">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span>Valid certificates</span>
-          <strong id="validCount">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span>Revoked certificates</span>
-          <strong id="revokedCount">0</strong>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="dashboard-toolbar">
-          <input
-            id="dashboardSearch"
-            type="search"
-            placeholder="Search by ID, student or course"
-            aria-label="Search certificates"
-          >
-
-          <select id="statusFilter" aria-label="Filter by status">
-            <option value="all">All statuses</option>
-            <option value="valid">Valid</option>
-            <option value="revoked">Revoked</option>
-          </select>
-
-          <button
-            type="button"
-            id="resetDemo"
-            class="button secondary-button"
-          >
-            Reset Demo Data
+    <section id="certificateSection" class="panel" hidden>
+      <div class="section-heading no-print">
+        <h2>Certificate Preview</h2>
+        <div class="button-row">
+          <button id="printButton" type="button">Print / Save as PDF</button>
+          <button id="downloadButton" type="button" class="secondary">
+            Download PDF
           </button>
         </div>
+      </div>
 
-        <p class="demo-notice">
-          Demo records exist only in this browser. Reset Demo Data restores
-          the sample records.
-        </p>
+      <article id="certificate" class="certificate">
+        <p class="certificate-label">CERTIFICATE OF ACHIEVEMENT</p>
+        <h1 id="certTitle">Certificate of Completion</h1>
+        <p>This certificate is proudly presented to</p>
+        <h2 id="certStudent" class="student-name"></h2>
+        <p>for successfully completing</p>
+        <h3 id="certCourse"></h3>
 
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Certificate ID</th>
-                <th>Student</th>
-                <th>Course</th>
-                <th>Issue Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="certificateTableBody"></tbody>
-          </table>
+        <div class="certificate-details">
+          <p><strong>Certificate ID:</strong> <span id="certId"></span></p>
+          <p><strong>Issue date:</strong> <span id="certDate"></span></p>
+          <p><strong>Issued by:</strong> <span id="certIssuer"></span></p>
         </div>
 
-        <p id="emptyDashboard" class="empty-state" hidden>
-          No certificates match your search.
-        </p>
-      </div>
-    </section>
-
-    <!-- PUBLIC VERIFICATION -->
-    <section
-      id="verify"
-      class="section content-section verify-section"
-    >
-      <div class="section-heading">
-        <span class="eyebrow">PUBLIC VERIFICATION</span>
-        <h2>Verify a certificate</h2>
-        <p>
-          Enter the certificate ID to check whether the certificate exists
-          and whether it is currently valid.
-        </p>
-      </div>
-
-      <div class="verify-card">
-        <form id="verifyForm">
-          <label for="verifyId">Certificate ID</label>
-
-          <div class="verify-input-row">
-            <input
-              id="verifyId"
-              type="text"
-              placeholder="e.g. CC-DEMO-001"
-              required
-            >
-
-            <button type="submit" class="button primary-button">
-              Verify
-            </button>
+        <div class="certificate-footer">
+          <div>
+            <p class="signature-line"></p>
+            <strong id="certIssuerFooter"></strong>
+            <p>Authorized Issuer</p>
           </div>
-        </form>
+          <div id="certificateQR" aria-label="Certificate verification QR code"></div>
+        </div>
 
-        <div
-          id="verificationResult"
-          class="verification-result"
-          hidden
-          aria-live="polite"
-        ></div>
-      </div>
+        <p class="certificate-note">
+          Verify this certificate using its unique ID or QR code.
+        </p>
+      </article>
     </section>
-
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <a href="#home" class="brand footer-brand">
-      <span class="brand-icon">CV</span>
-      <span>CertiVerify</span>
-    </a>
-    <p>Digital Certificate Verification System</p>
+  <footer class="no-print">
+    <p>CertiVerify — Digital Certificate Verification System</p>
   </footer>
 
-  <!-- QR CODE LIBRARY -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="script.js"></script>
+  <script src="public.js"></script>
 
-  <!-- LOGOUT BUTTON EVENT -->
-  <script>
-    document.getElementById("logoutButton").addEventListener(
-      "click",
-      logoutAdmin
-    );
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+  
 </body>
 </html>
-
