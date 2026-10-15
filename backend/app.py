@@ -7,19 +7,17 @@ import secrets
 import uuid
 from datetime import datetime
 
+import firebase_db as store
+
 app = Flask(__name__)
 CORS(app)
 
 # Change this to the real website address after deployment
 FRONTEND_URL = "http://127.0.0.1:5500"
 
-# Only people who know this code can register as admin.
-# Set a real one in your environment later; this is just a default for testing.
 ADMIN_SIGNUP_CODE = os.environ.get("ADMIN_SIGNUP_CODE", "change-me-123")
 
-# Temporary storage (Firebase will replace these later)
-certificates = {}
-admins = {}   # username -> {"username", "password_hash"}
+# Login tokens stay in memory for now
 tokens = {}   # login token -> username
 
 
@@ -28,7 +26,6 @@ def generate_certificate_id():
     return f"CERT-{year}-{uuid.uuid4().hex[:6].upper()}"
 
 
-# ---------- Authorization ----------
 def admin_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -62,13 +59,10 @@ def register_admin():
         return jsonify({"error": "Username must be at least 3 characters"}), 400
     if len(password) < 6:
         return jsonify({"error": "Password must be at least 6 characters"}), 400
-    if username in admins:
+    if store.get_admin(username):
         return jsonify({"error": "Username already exists"}), 409
 
-    admins[username] = {
-        "username": username,
-        "password_hash": generate_password_hash(password),
-    }
+    store.save_admin(username, generate_password_hash(password))
     return jsonify({"message": "Admin registered successfully"}), 201
 
 
@@ -78,7 +72,7 @@ def login_admin():
     username = str(data.get("username", "")).strip().lower()
     password = str(data.get("password", ""))
 
-    admin = admins.get(username)
+    admin = store.get_admin(username)
     if not admin or not check_password_hash(admin["password_hash"], password):
         return jsonify({"error": "Wrong username or password"}), 401
 
@@ -102,7 +96,6 @@ def whoami():
 
 
 # ---------- Certificates ----------
-# 1. Admin issues a certificate (protected)
 @app.route("/api/certificates", methods=["POST"])
 @admin_required
 def add_certificate():
@@ -128,7 +121,11 @@ def add_certificate():
         "status": "valid",
         "issued_by_admin": g.admin,
     }
-    certificates[cert_id] = certificate
+
+    try:
+        store.add_certificate(certificate)
+    except Exception as error:
+        return jsonify({"error": f"Could not save certificate: {error}"}), 500
 
     return jsonify({
         "message": "Certificate issued successfully",
@@ -137,10 +134,13 @@ def add_certificate():
     }), 201
 
 
-# 2. Anyone verifies a certificate (PUBLIC, no login)
+# PUBLIC: anyone can verify
 @app.route("/api/verify/<certificate_id>", methods=["GET"])
 def verify_certificate(certificate_id):
-    cert = certificates.get(certificate_id)
+    try:
+        cert = store.get_certificate(certificate_id)
+    except Exception as error:
+        return jsonify({"error": f"Database error: {error}"}), 500
 
     if not cert:
         return jsonify({"result": "invalid", "message": "Certificate not found"}), 404
@@ -148,35 +148,28 @@ def verify_certificate(certificate_id):
     return jsonify({"result": cert["status"], "certificate": cert})
 
 
-# 3. Admin revokes a certificate (protected)
 @app.route("/api/certificates/<certificate_id>/revoke", methods=["PUT"])
 @admin_required
 def revoke_certificate(certificate_id):
-    cert = certificates.get(certificate_id)
+    cert = store.update_status(certificate_id, "revoked")
     if not cert:
         return jsonify({"error": "Certificate not found"}), 404
-
-    cert["status"] = "revoked"
     return jsonify({"message": "Certificate revoked", "certificate": cert})
 
 
-# 4. Admin restores a certificate (protected)
 @app.route("/api/certificates/<certificate_id>/restore", methods=["PUT"])
 @admin_required
 def restore_certificate(certificate_id):
-    cert = certificates.get(certificate_id)
+    cert = store.update_status(certificate_id, "valid")
     if not cert:
         return jsonify({"error": "Certificate not found"}), 404
-
-    cert["status"] = "valid"
     return jsonify({"message": "Certificate restored", "certificate": cert})
 
 
-# 5. Admin dashboard: list all certificates (protected)
 @app.route("/api/certificates", methods=["GET"])
 @admin_required
 def list_certificates():
-    return jsonify({"certificates": list(certificates.values())})
+    return jsonify({"certificates": store.list_certificates()})
 
 
 if __name__ == "__main__":

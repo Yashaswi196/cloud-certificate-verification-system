@@ -52,3 +52,33 @@ def revoke_certificate(certificate_id):
         return {"message": "Certificate revoked successfully"}
 
     return None
+
+
+def list_certificates():
+    return [document.to_dict() for document in certificates.stream()]
+
+
+def update_status(certificate_id, status):
+    results = certificates.where(
+        "certificate_id", "==", certificate_id
+    ).limit(1).stream()
+
+    for document in results:
+        document.reference.update({"status": status})
+        return document.reference.get().to_dict()
+
+    return None
+
+
+admins = db.collection("admins")
+
+
+def save_admin(username, password_hash):
+    admins.document(username).set(
+        {"username": username, "password_hash": password_hash}
+    )
+
+
+def get_admin(username):
+    document = admins.document(username).get()
+    return document.to_dict() if document.exists else None
